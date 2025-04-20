@@ -15,8 +15,14 @@ app.get('/api/qris/:amount/:codeqr', async (req, res) => {
 
     try {
         const feeServer = Math.floor(Math.random() * 200);
-        const total = parseInt(amount) + feeServer;
+        const total = amount + feeServer;
         const qris = await createQRIS(total, codeqr);
+        const expired = qris.expirationTime.toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'Asia/Jakarta'
+        })
 
         const filename = `qris-${qris.transactionId}.png`;
         fs.writeFileSync('/tmp/' + filename, qris.qrImage);
@@ -27,8 +33,8 @@ app.get('/api/qris/:amount/:codeqr', async (req, res) => {
             feeServer,
             total,
             trxId: qris.transactionId,
-            expirationTime: qris.expirationTime,
-            qrImageUrl: `${req.protocol}://${req.get('host')}/${filename}`
+            expired: expired + 'WIB',
+            qrUrl: `${req.protocol}://${req.get('host')}/${filename}`
         });
     } catch (error) {
         res.status(500).json({ error: 'Gagal Membuat Qris', detail: error.message });
