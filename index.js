@@ -15,7 +15,7 @@ app.get('/api/qris/:amount/:codeqr', async (req, res) => {
 
     try {
         const feeServer = Math.floor(Math.random() * 200);
-        const total = amount + feeServer;
+        const total = parseInt(amount) + feeServer;
         const qris = await createQRIS(total, codeqr);
         const expired = qris.expirationTime.toLocaleTimeString('en-US', { 
         hour: '2-digit', 
