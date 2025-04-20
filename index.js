@@ -19,7 +19,7 @@ app.get('/api/qris/:amount/:codeqr', async (req, res) => {
         const qris = await createQRIS(total, codeqr);
 
         const filename = `qris-${qris.transactionId}.png`;
-        fs.writeFileSync('/tmp/' filename, qris.qrImage);
+        fs.writeFileSync('/tmp/' + filename, qris.qrImage);
 
 
         res.json({
